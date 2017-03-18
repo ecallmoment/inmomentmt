@@ -1,0 +1,126 @@
+body {
+    background-color: #f4f7f7;
+    color: #707b7b;
+    font-family: 'Open Sans';
+
+}
+
+a {
+    color: #5fa8cc;
+}
+
+.navContainer{
+    color:#aebfbf;
+    background-color: #101212;
+}
+
+.content{
+    padding:5%;
+}
+
+.tag-results{
+    padding-bottom:2%;
+}
+
+#new-project-name{
+    padding-right:2%;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display:inline-block;
+  
+    vertical-align:middle;
+    margin-left:20px
+}
+
+label {
+    font-size:21px;
+    display:inline-block;
+    
+    padding-top: 5px;
+    text-align: left;
+    width: 200px;
+}
+
+#tagmapfile{
+    padding-right:2%;
+}
+
+.general-button {
+    margin-top:2%;
+    margin-bottom:2%;
+    border-radius: 52px;
+    border: 2px solid #707b7b;
+    opacity: .9;
+    outline:0;
+    padding: 10px; 
+    vertical-align:middle;
+    /*overflow:hidden;*/
+    float: left;
+    color:#5fa8cc;
+    background-color:#f4f7f7;
+    text-align:center;
+    cursor:pointer;
+    /*white-space:nowrap*/
+    
+}
+.color-button {
+    margin-top:2%;
+    margin-bottom:2%;
+    margin-right:2%;
+    border-radius: 52px;
+    border: 2px solid;
+
+    padding:1%; 
+    vertical-align:middle;
+    /*overflow:hidden;*/
+    float: left;
+    color:#707b7b;
+    text-align:center;
+    
+}
+
+
+
+#upload-buttons {
+  margin-top:20px;
+  margin-bottom: 20px;
+}
+
+.project-list{
+  opacity: .9;
+    color:#5fa8cc;
+    background-color:#f4f7f7;
+}
+
+#upload-buttons {
+  display: table; 
+  width: 100%; 
+  
+}
+#auto-buttons {
+  display: table; 
+  width: 100%; 
+  
+}
+
+
+.logged-in{
+  display: table; 
+  width: 100%; 
+  
+}
+#switch-buttons{display: table-header-group; } 
+#progress-bars{display: table-header-group; } 
+#initial-tag-button{display: table-header-group; } 
+#auto-tagging{display: table-footer-group; }
+#manual-tagging{display: table-footer-group; }
+
+#color-buttons {display: table-header-group; } 
+#navigate-buttons {display: table-row-group; } 
+#taglabel{display: table-header-group; } 
+#tagmap-upload {display: table-row-group; } /* Will be displayed at the bottom of the pseudo-table */
+#annotation-upload {display: table-row-group;    } /* Will be displayed in the middle */
+#save-and-upload {display: table-footer-group; } /* Will be displayed at the top */

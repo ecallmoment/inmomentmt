@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Help</title>
+        
+    <!--Javascript Resource Files-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+        
+    <!--this is for the main js file-->
+    <script type="text/javascript" src="js/main.js"></script>
+        
+    <!--CSS Resource Files-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--won't be created unless necessary  <link href="help.css" rel="stylesheet" type="text/css" />-->
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link href='//fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+</head>
+<body onload="checkAuthState('help')">
+    <!--Navigation Header-->
+    <div class="navContainer">
+        <nav class="navbar navbar-inverse hidden-phone">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">InMoment Manual Tagging</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="project.html">Projects</a></li>
+                    <li><a href="tagging.html">Tagging</a></li>
+                    <li><a href="results.html">Results</a></li>
+                    <li class="active"><a href="help.html">Help</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" >
+                    <li><a href="" id="sign-in-status"><span class="glyphicon glyphicon-user" ></span> Signed Out</a></li>
+                    <li><a id="sign-in" onClick="logging()"><span class="glyphicon glyphicon-log-in" ></span> Sign In</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!--Help Content-->
+    <div id="help-info" class="content">
+        <h3>Projects</h3>
+            <ul style="list-style:none">
+                <li>
+                    <h4>Upload</h4>
+                        <ul style="list-style:none">
+                            <li>-  Click 'Add Project' from the 'Projects' page.</li>
+                            <li>-  Type in a new project name.</li>
+                            <li>-  Choose a CSV tag map file. Each row should include the whole hierarchy for the tag.</li>
+                            <li>-  Choose a CSV file of 'text analyzer' output. This is essentially the outputted Excel file, but with the headings to the side deleted, and saved as a CSV.</li>
+                            <li>-  Click 'Save.' </li>
+                        </ul>
+                </li>
+                <li>
+                    <h4>View</h4>
+                        <ul style="list-style:none">
+                            <li>-  'Tagging' brings you to the tagging page for that project.</li>
+                            <li>-  'Results' brings you to the results page for that project.</li>
+                            <li>-  The trashcan deletes that project from the database. (There's a check to make sure you want to do that.)</li>
+                        </ul>
+                </li>
+            </ul>
+        <h3>Tagging</h3>
+            <ul style="list-style:none">
+                <li>
+                    <h4>Autotagged Comments</h4>
+                        <ul style="list-style:none">
+                            <li>-  You will start from the beginning (if you're just starting) or from the place you left off.</li>
+                            <li>-  Use 'Back' and 'Forward' to navigate without changing the classification of the comment.</li>
+                            <li>-  'Yes' means that the highlighted region is a representation of the bolded tag.</li>
+                            <li>-  'No' means that the highlighted region is not a representation of the bolded tag. This tag—unhighlighted—will be added to the comments to manually tag.</li>
+                            <li>-  'Flag This' allows you to flag the tag if you find it particularly problematic for whatever reason.</li>
+                            <!--<li>-  Jump to any comment at any point. This isn't a specific comment number, but rather the comment/tag pair's location in the database.</li>-->
+                            <li>-  Switch to Manual Tagging at any time.</li>
+                            <li>-  You can change the classification of any comment/tag at any time. The most recent classification will be what's saved in the database.</li>
+                        </ul>
+                </li>
+                <li> 
+                    <h4>Manual Tagged Comments</h4>
+                        <ul style="list-style:none">
+                              <li>-  You will start from the beginning (if you're just starting) or from the place you left off.</li>
+                              <li>-  Use 'Back' and 'Next' to navigate without changing the classification of the comment.</li>
+                              <!--<li>-  Jump to any comment at any point. This isn't a specific comment number, but rather the comment/tag pair's location in the database.</li>-->
+                              <li>-  Select as many tags as you want from the menu (click a second time to remove the tag). The tags will apply to the entire shown comment by default.</li>
+                              <li>-  If you want to only apply a tag to a certain section of the comment, highlight the selection, and then apply the tags to that selection. This newly created comment/tag pair will go to the end of the comments in the manual tagging section.</li>
+                        </ul>
+                </li>
+                <li>
+                    <h4>Progress</h4>
+                        <ul style="list-style:none">
+                            <li><em>Under development</em></li>
+                        </ul>
+                </li>
+            </ul>
+        <h3>Results</h3>
+            <ul style="list-style:none">
+                <li>
+                    <h4>View</h4>
+                        <ul style="list-style:none">
+                            <li>-  Each category is sorted by tag name.</li>
+                            <li>-  Highlighting provides a quick glance at the text covered by the tag.</li>
+                        </ul>
+                </li>
+                <li>
+                    <h4>Download</h4>
+                        <ul style="list-style:none">
+                            <li>-  Downloads a CSV of the data shown on the 'Results' page.</li>
+                            <li>-  Columns include: comment number, the result, the tag name, the covered text, and the full comment.</li>
+                            <li>-  AT Correct means that the autotag was correct, while AT Incorrect means that the autotag was incorrect and may show up in a MT CREATED result, which is the result of manual tagging and additional highlighting. AT Flagged refers to the comment being flagged during the auto-tag checking process.</li>
+                        </ul>
+                </li>
+            </ul>
+        <h3>Signing In/Out</h3>
+            <ul style="list-style:none">
+                <li><em>Under development</em></li>
+            </ul>
+    </div>
+
+
+
+
+
+
+</body>
+</html>
