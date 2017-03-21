@@ -5,12 +5,17 @@
     $.fn.mobileMenu = function(structure, options) {
         
         //create array of tags selected already on a comment
-        var selectedTags = new Array()
-        database.ref('users/' + window.uid + '/projects/' + window.project_name + '/comments/' + localStorage.commentNumber + "/" + localStorage.commentKey + "/commentMT").on('value', function(snapshot){
-            for(var tag in snapshot.val()){
-                selectedTags.push(snapshot.val()[tag])
-            }
-        })
+       // var selectedTags = new Array()
+      // console.log(localStorage.currentMTtags)
+       var selectedTags = new Array()
+        if(localStorage.currentMTtags != undefined){
+            selectedTags = JSON.parse(localStorage.currentMTtags)
+        }
+       // console.log(selectedTags)
+        //go through all of the comments and check for "MT Created"
+        //make projectName dynamic
+        //console.log(localStorage.projectName)
+        
         var o = options || {};
         var self = this;
         var subOpen = 1;
@@ -138,39 +143,49 @@
         function addUrlToItem(item, url) {
             item.on('click', function(){
                 var clickedComment = JSON.parse(localStorage.currentMTcomment)
+                console.log(clickedComment)
+                if(clickedComment["taggedas"] != "MT Created")
+                {
+                    localStorage.coveredText = clickedComment["coveredtext"]
+                }
+                console.log(url)
+                console.log(localStorage.coveredText)
                 if (item[0].style.backgroundColor == "rgb(244,247,247)" || item[0].style.backgroundColor == "" ){
                     item[0].style.backgroundColor = 'rgb(12, 90, 173)'
                     item[0].style.color = 'rgb(244,247,247)'
                     
                     if(localStorage.coveredText != ""){
-                        var newComment = Object.create(null)
-                        newComment["commenttag"] = "Z - no annotation"
-                        newComment["commentcovered"] = clickedComment["commentcovered"]
+                       database.ref('projects/' + localStorage.projectName + "/comments/" + clickedComment["commentkey"] + "/tags/" + url + "/").push({
+                            coveredtext: localStorage.coveredText,
+                            taggedas: "MT Created"
+                        }).then(function(snapshot){
+                            clickedComment["key"] = snapshot.key
+                            localStorage.currentMTcomment = JSON.stringify(clickedComment)
+                        })
                         
-                        newComment["commentnum"] = clickedComment["commentnum"]
-                        newComment["commentname"] = "no annotation name"
-                        newComment["taggedas"] = "MT CREATED"
-                        newComment["commentfull"] = clickedComment["commentfull"]
-                        
-                        var refOne = database.ref('users/' + window.uid + '/projects/' + window.project_name + '/comments/' + clickedComment["commentnum"])
-                        var refTwo = refOne.push(newComment)
-                        
-                        localStorage.commentKey = refTwo.key;
+                      
                     }
-                    database.ref('users/' + window.uid + '/projects/' + window.project_name + '/comments/' + clickedComment["commentnum"] + "/" + localStorage.commentKey + "/commentMT").push(url)
+                    else{
+                        database.ref('projects/' + localStorage.projectName + "/comments/" + clickedComment["commentkey"] + "/tags/" + url + "/").push({
+                            coveredtext: "",
+                            taggedas: "MT Created"
+                        }).then(function(snapshot){
+                            clickedComment["key"] = snapshot.key
+                            localStorage.currentMTcomment = JSON.stringify(clickedComment)
+                        })
+                    }
                 }
                 else{
                     item[0].style.backgroundColor = 'rgb(244,247,247)'
                     item[0].style.color = 'rgb(12,90,173)'
                     
-                    database.ref('users/' + window.uid + '/projects/' + window.project_name + '/comments/' + clickedComment["commentnum"] + "/" + clickedComment["annotationkey"] + "/commentMT").orderByValue().equalTo(url).on('value', function(snapshot) {
-                        snapshot.forEach(function(childSnapshot) {
+                    database.ref('projects/' + localStorage.projectName + "/comments/" + clickedComment["commentkey"] + "/tags/" + url + "/" + clickedComment["key"] ).on('value', function(snapshot) {
+                        console.log(snapshot.val())
+                        
+                               snapshot.ref.remove()
                             
-                            if(childSnapshot.val() == url){
-                                childSnapshot.ref.remove()
-                            }
                         })
-                    })  
+                      
                 }
             })
         }
