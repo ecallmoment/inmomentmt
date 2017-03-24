@@ -77,6 +77,28 @@ function logging() {
     }
 }
 
+function parseData(file, callback)
+{
+    var lines = new Array()
+   // for(var a = 0; a < files.length; a++){
+       
+        //console.log(files[a])
+        Papa.parse(file, {
+       // worker: true,
+            step: function(results) {
+                //console.log("Row:", results.data);
+                
+                lines.push(results.data)
+            },
+            complete: function(results){
+                //console.log(lines)
+                callback(lines)
+                
+            }
+        })
+  //  }
+  //  callback(lines)
+}
 function uploadProject(){
     var projectName = document.getElementById("new-project-name").value
     console.log(projectName)
@@ -92,14 +114,37 @@ function uploadProject(){
         accuracy: 0,
         creator: localStorage.user}
     database.ref("projects/" + projectName).child("info").update(newProjectData);
-
+    var files = new Array()
     var fileInputTagMap = document.getElementById('tagmapfile');
-    var tagmap = fileInputTagMap.files[0];
+    files.push(fileInputTagMap.files[0]);
     var fileInputAnnotations = document.getElementById('annotationfile');
-    var annotatedComments = fileInputAnnotations.files[0];
-    uploadTagMap(projectName, tagmap, function(returnedTagmap){
-        //console.log(returnedTagmap)
-        tagnameComments(projectName, returnedTagmap,annotatedComments, function(returnedComments){
+    files.push(fileInputAnnotations.files[0]);
+    dataArray = new Array()
+    parseData(files[0], function(tagmap){
+        
+            console.log(tagmap)
+             parseData(files[1], function(data2){
+                 console.log(data2)
+                 uploadTagMap(projectName, tagmap, function(returnedTagmap){
+                     console.log(returnedTagmap)
+                     
+                     
+                     
+                 })
+                 
+             })
+    })
+    
+    
+    /*Papa.parse(document.getElementById('annotationfile').files[0], {
+        worker: true,
+	step: function(results) {
+		console.log("Row:", results.data);
+	}
+    })*/
+    //uploadTagMap(projectName, tagmap, function(returnedTagmap){
+    //    console.log(returnedTagmap)
+        /*tagnameComments(projectName, returnedTagmap,annotatedComments, function(returnedComments){
             console.log(returnedComments)
             for(var s = 0; s<returnedComments.length; s++)
             {
@@ -107,23 +152,32 @@ function uploadProject(){
             }
             uploadComments(projectName, returnedComments)
             document.location.href = "project.html"
-        })
-    })
+        })*/
+    //})
     database.ref("users/" + localStorage.user + "/projects/").push(projectName)
 }
 
 function uploadTagMap(projectName, tagmap, callback){
     var tagmapObject = new Array()
-    var reader = new FileReader();
-    reader.readAsText(tagmap)
-    reader.onerror = errorHandler
-    reader.onload = function(){
-    csv = event.target.result
-    var allTextLines = csv.split(/\r\n|\n/);
+   // var reader = new FileReader();
+    //reader.readAsText(tagmap)
+   // reader.readAsText(tagmap.slice(0, 10 * 1024 * 1024));
+   // reader.onerror = errorHandler
+  //  reader.onload = function(event){
+   // csv = event.target.result
+   // var allTextLines = csv.split(/\r\n|\n/);
     //console.log(allTextLines)
-    for (var a = 0; a < allTextLines.length; a++){
-        var tagLine = allTextLines[a].split(",")
-        tagmapObject.push(tagLine)
+    for (var a = 0; a < tagmap.length; a++){
+        console.log(tagmap[a])
+        try{
+        for(var b = 0; b < tagmap[a].length; a++){
+            console.log(tagmap[a][b])
+            tagmapObject.push(tagmap[a][b])
+        }
+        }catch(err){
+            
+        }
+       
     }
    // console.log(tagmapObject)
     for (e in tagmapObject) {
@@ -159,9 +213,6 @@ function uploadTagMap(projectName, tagmap, callback){
     }
     console.log(myTagsDict)
     callback(myTagsDict)
-  };
-  
-  
 }
 
 function errorHandler(evt) {
@@ -172,13 +223,24 @@ function errorHandler(evt) {
 
 function tagnameComments(projectName, returnedMap,annotatedcomments, callback){
     var annotated = new Array()
-    var reader = new FileReader();
-    reader.readAsText(annotatedcomments)
+    console.log("annotating")
+     var reader = new FileReader();
+    //reader.readAsText(tagmap)
+    reader.readAsText(annotatedcomments.slice(0, 10 * 1024 * 1024));
     reader.onerror = errorHandler
-    reader.onload = function(){
+    reader.onload = function(event){
+        console.log("pleaseeeee")
     csv = event.target.result
     var allTextLines = csv.split(/\r\n|\n/);
     //console.log(allTextLines)
+    /*var reader = new FileReader();
+    reader.readAsText(annotatedcomments)
+    
+    reader.onerror = errorHandler
+    reader.onload = function(event){
+    csv = event.target.result
+    var allTextLines = csv.split(/\r\n|\n/);
+    //console.log(allTextLines)*/
     for (var a = 0; a < allTextLines.length; a++){
         var textLine = allTextLines[a].split(",")
         annotated.push(textLine)
@@ -217,6 +279,7 @@ function tagnameComments(projectName, returnedMap,annotatedcomments, callback){
     }
      callback(cannotated)
 }
+
 }
 
 function uploadComments(projectName, returnedComments){

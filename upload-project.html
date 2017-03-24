@@ -7,13 +7,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript">
     </script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
     </script>
     <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js">
     </script><!--this is for the main js file-->
 
-    <script src="js/main.js" type="text/javascript">
-    </script><!--CSS Resource Files-->
+   
+    <script src="js/papaparse.js" type="text/javascript"></script>
+     <script src="js/main.js" type="text/javascript"></script>
+    <!--CSS Resource Files-->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"><!--won't be created unless necessary  <link href="upload-project.css" rel="stylesheet" type="text/css" />-->
     <link href="css/general.css" rel="stylesheet" type="text/css">
     <link href='//fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
@@ -72,7 +75,7 @@
         <br>
         <br>
         <div id="save-and-upload">
-            <a class="general-button" href="project.html" onclick="uploadProject()">Save and Upload</a>
+            <a class="general-button" onclick="uploadProject()">Save and Upload</a>
         </div>
     </div>
 </body>
