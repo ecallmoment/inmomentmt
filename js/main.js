@@ -127,7 +127,12 @@ function uploadProject(){
                  console.log(data2)
                  uploadTagMap(projectName, tagmap, function(returnedTagmap){
                      console.log(returnedTagmap)
-                     
+                     tagnameComments(projectName, returnedTagmap,data2, function(returnedComments){
+                         //console.log(returnedComments)
+                        uploadComments(projectName, returnedComments, function(doneData){
+                            document.location.href = "project.html"
+                        })
+                     })
                      
                      
                  })
@@ -168,10 +173,10 @@ function uploadTagMap(projectName, tagmap, callback){
    // var allTextLines = csv.split(/\r\n|\n/);
     //console.log(allTextLines)
     for (var a = 0; a < tagmap.length; a++){
-        console.log(tagmap[a])
+       // console.log(tagmap[a])
         try{
         for(var b = 0; b < tagmap[a].length; a++){
-            console.log(tagmap[a][b])
+          //  console.log(tagmap[a][b])
             tagmapObject.push(tagmap[a][b])
         }
         }catch(err){
@@ -223,33 +228,23 @@ function errorHandler(evt) {
 
 function tagnameComments(projectName, returnedMap,annotatedcomments, callback){
     var annotated = new Array()
-    console.log("annotating")
-     var reader = new FileReader();
-    //reader.readAsText(tagmap)
-    reader.readAsText(annotatedcomments.slice(0, 10 * 1024 * 1024));
-    reader.onerror = errorHandler
-    reader.onload = function(event){
-        console.log("pleaseeeee")
-    csv = event.target.result
-    var allTextLines = csv.split(/\r\n|\n/);
-    //console.log(allTextLines)
-    /*var reader = new FileReader();
-    reader.readAsText(annotatedcomments)
-    
-    reader.onerror = errorHandler
-    reader.onload = function(event){
-    csv = event.target.result
-    var allTextLines = csv.split(/\r\n|\n/);
-    //console.log(allTextLines)*/
-    for (var a = 0; a < allTextLines.length; a++){
-        var textLine = allTextLines[a].split(",")
-        annotated.push(textLine)
+    for (var a = 0; a < annotatedcomments.length; a++){
+        //console.log(annotatedcomments[a])
+        try{
+        for(var b = 0; b < annotatedcomments[a].length; a++){
+            //console.log(annotatedcomments[a][b])
+            annotated.push(annotatedcomments[a][b])
+        }
+        }catch(err){
+            
+        }
+       
     }
-    //console.log(returnedMap)
+    console.log(annotated)
      cannotated = [];
     cnumber = 0;
     for (var k = 0; k < annotated.length; k++) {
-        //console.log(annotated[k][0])
+        console.log(annotated[k])
         if (parseInt(annotated[k][0]) > cnumber) {
             cnumber = parseInt(annotated[k][0]);
             ccomment = annotated[k][1]
@@ -258,11 +253,12 @@ function tagnameComments(projectName, returnedMap,annotatedcomments, callback){
                 var linecomment = ccomment;
                 var lineannotation = "";
                 var coveredtext = "";
-                var toannotate = [cnumber, linecomment, coveredtext, lineannotation, ""];
+               var toannotate = [cnumber, linecomment, coveredtext, lineannotation, ""];
                 
                 //console.log(toannotate)
                 cannotated.push(toannotate);
-            } else if (returnedMap[annotated[k][2]] === undefined) {
+            }
+            else if (returnedMap[annotated[k][2]] === undefined) {
                 // console.log("tagname not found for ",annotated[k][2]);
             } else {
                 var linecomment = ccomment;
@@ -278,11 +274,11 @@ function tagnameComments(projectName, returnedMap,annotatedcomments, callback){
        
     }
      callback(cannotated)
-}
+
 
 }
 
-function uploadComments(projectName, returnedComments){
+function uploadComments(projectName, returnedComments, callback){
   for(var y = 0; y<returnedComments.length; y++){
       var comment = returnedComments[y]
         database.ref("projects/" + projectName + "/comments/" + comment[0]).update({fullcomment: comment[1]})
